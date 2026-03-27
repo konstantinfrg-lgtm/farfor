@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.venv/
+.env
+app.db
+.pytest_cache/
+release/
+farfor_release.tar.gz

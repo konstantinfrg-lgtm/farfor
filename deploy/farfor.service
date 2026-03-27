@@ -1,0 +1,15 @@
+[Unit]
+Description=Farfor Flask App
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/farfor
+EnvironmentFile=/var/www/farfor/.env
+ExecStart=/var/www/farfor/.venv/bin/gunicorn -c deploy/gunicorn.conf.py wsgi:app
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

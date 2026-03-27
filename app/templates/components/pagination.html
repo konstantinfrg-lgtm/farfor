@@ -1,0 +1,17 @@
+{% macro render_pagination(pagination) %}
+  {% if pagination.pages > 1 %}
+    <div class="pagination">
+      {% for page in pagination.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page %}
+          {% if page == pagination.page %}
+            <span class="page active">{{ page }}</span>
+          {% else %}
+            <a class="page" href="{{ url_for(request.endpoint, **request.view_args, page=page, **request.args.to_dict()) }}">{{ page }}</a>
+          {% endif %}
+        {% else %}
+          <span class="page">…</span>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endmacro %}

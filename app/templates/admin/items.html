@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Все карточки</h1>
+<ul>
+  {% for item in pagination.items %}
+    <li><a href="{{ url_for('items.detail', item_id=item.id) }}">{{ item.title }}</a> — {{ item.owner.username }}</li>
+  {% endfor %}
+</ul>
+{% endblock %}

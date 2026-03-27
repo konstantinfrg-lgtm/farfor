@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Админ-панель</h1>
+<div class="stats">
+  <div class="card">Пользователей: {{ users_count }}</div>
+  <div class="card">Карточек: {{ items_count }}</div>
+</div>
+<div class="nav">
+  <a href="{{ url_for('admin.users') }}">Пользователи</a>
+  <a href="{{ url_for('admin.items') }}">Карточки</a>
+  <a href="{{ url_for('admin.lookup_list', kind='manufacturers') }}">Справочники</a>
+</div>
+{% endblock %}

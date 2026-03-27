@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Главная — Фарфоровые молочники{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Коллекция фарфоровых молочников</h1>
+  <p>Каталог для коллекционеров: предметы, авторы, фабрики и история.</p>
+  <a class="btn" href="{{ url_for('main.catalog') }}">Перейти в каталог</a>
+</section>
+
+<h2>Последние добавления</h2>
+<div class="card-grid">
+  {% for item in latest_items %}
+    <article class="card">
+      {% if item.photos %}
+        <img src="{{ url_for('static', filename='uploads/' ~ item.photos[0].filename) }}" alt="{{ item.title }}">
+      {% endif %}
+      <h3><a href="{{ url_for('items.detail', item_id=item.id) }}">{{ item.title }}</a></h3>
+      <p>{{ item.period or 'Период не указан' }}</p>
+    </article>
+  {% else %}
+    <p>Пока нет опубликованных предметов.</p>
+  {% endfor %}
+</div>
+{% endblock %}

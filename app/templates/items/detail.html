@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}{{ item.title }}{% endblock %}
+{% block content %}
+<article class="detail">
+  <h1>{{ item.title }}</h1>
+  <p><strong>Период:</strong> {{ item.period or '—' }}</p>
+  <p><strong>Материал:</strong> {{ item.material or '—' }}</p>
+  <p><strong>Производитель:</strong> {{ item.manufacturer.name if item.manufacturer else '—' }}</p>
+  <p><strong>Художник:</strong> {{ item.artist.name if item.artist else '—' }}</p>
+  <p><strong>Форма:</strong> {{ item.shape.name if item.shape else '—' }}</p>
+  <p><strong>Роспись:</strong> {{ item.painting_style.name if item.painting_style else '—' }}</p>
+  <p>{{ item.comments }}</p>
+  <div class="gallery">
+    {% for photo in item.photos %}
+      <img src="{{ url_for('static', filename='uploads/' ~ photo.filename) }}" alt="Фото {{ loop.index }}">
+    {% else %}
+      <p>Фото пока нет.</p>
+    {% endfor %}
+  </div>
+  {% if current_user.is_authenticated and (current_user.is_admin or current_user.id == item.owner_id) %}
+    <a class="btn" href="{{ url_for('items.edit', item_id=item.id) }}">Редактировать</a>
+    <form method="post" action="{{ url_for('items.delete', item_id=item.id) }}" onsubmit="return confirm('Удалить карточку?');">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button class="btn danger" type="submit">Удалить</button>
+    </form>
+  {% endif %}
+</article>
+{% endblock %}

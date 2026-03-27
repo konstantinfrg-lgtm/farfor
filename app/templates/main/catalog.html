@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% from 'components/pagination.html' import render_pagination %}
+{% block title %}Каталог{% endblock %}
+{% block content %}
+<h1>Каталог</h1>
+<form method="get" class="filter-grid">
+  <input type="text" name="q" value="{{ request.args.get('q','') }}" placeholder="Поиск по названию, материалу, комментариям">
+  <input type="text" name="period" value="{{ request.args.get('period','') }}" placeholder="Период">
+  <select name="manufacturer_id"><option value="">Производитель</option>{% for x in filters.manufacturers %}<option value="{{ x.id }}" {% if request.args.get('manufacturer_id', type=int)==x.id %}selected{% endif %}>{{ x.name }}</option>{% endfor %}</select>
+  <select name="artist_id"><option value="">Художник</option>{% for x in filters.artists %}<option value="{{ x.id }}" {% if request.args.get('artist_id', type=int)==x.id %}selected{% endif %}>{{ x.name }}</option>{% endfor %}</select>
+  <select name="shape_id"><option value="">Форма</option>{% for x in filters.shapes %}<option value="{{ x.id }}" {% if request.args.get('shape_id', type=int)==x.id %}selected{% endif %}>{{ x.name }}</option>{% endfor %}</select>
+  <select name="painting_style_id"><option value="">Роспись</option>{% for x in filters.painting_styles %}<option value="{{ x.id }}" {% if request.args.get('painting_style_id', type=int)==x.id %}selected{% endif %}>{{ x.name }}</option>{% endfor %}</select>
+  <select name="owner_id"><option value="">Владелец</option>{% for x in filters.owners %}<option value="{{ x.id }}" {% if request.args.get('owner_id', type=int)==x.id %}selected{% endif %}>{{ x.username }}</option>{% endfor %}</select>
+  <select name="sort">
+    <option value="newest" {% if request.args.get('sort')=='newest' %}selected{% endif %}>Сначала новые</option>
+    <option value="oldest" {% if request.args.get('sort')=='oldest' %}selected{% endif %}>Сначала старые</option>
+    <option value="title_asc" {% if request.args.get('sort')=='title_asc' %}selected{% endif %}>Название А-Я</option>
+    <option value="title_desc" {% if request.args.get('sort')=='title_desc' %}selected{% endif %}>Название Я-А</option>
+    <option value="updated" {% if request.args.get('sort')=='updated' %}selected{% endif %}>Недавно обновленные</option>
+  </select>
+  <button class="btn" type="submit">Применить</button>
+</form>
+
+<div class="card-grid">
+  {% for item in pagination.items %}
+    <article class="card">
+      {% if item.photos %}<img src="{{ url_for('static', filename='uploads/' ~ item.photos[0].filename) }}" alt="{{ item.title }}">{% endif %}
+      <h3><a href="{{ url_for('items.detail', item_id=item.id) }}">{{ item.title }}</a></h3>
+      <p>{{ item.manufacturer.name if item.manufacturer else 'Без производителя' }}</p>
+    </article>
+  {% else %}
+    <p>Ничего не найдено.</p>
+  {% endfor %}
+</div>
+
+{{ render_pagination(pagination) }}
+{% endblock %}

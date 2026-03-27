@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Профиль</h1>
+<form method="post" class="form-card">
+  {{ form.hidden_tag() }}
+  {{ form.full_name.label }} {{ form.full_name() }}
+  {{ form.bio.label }} {{ form.bio(rows=5) }}
+  {{ form.submit(class='btn') }}
+</form>
+{% endblock %}
