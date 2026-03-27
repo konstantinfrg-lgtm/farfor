@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Справочник: {{ kind }}</h1>
+<form method="post" class="form-card">
+  {{ form.hidden_tag() }}
+  {{ form.name.label }} {{ form.name() }}
+  {{ form.submit(class='btn') }}
+</form>
+<ul>
+  {% for rec in records %}
+    <li>
+      {{ rec.name }}
+      <form method="post" action="{{ url_for('admin.lookup_delete', kind=kind, record_id=rec.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="btn danger">Удалить</button>
+      </form>
+    </li>
+  {% endfor %}
+</ul>
+{% endblock %}

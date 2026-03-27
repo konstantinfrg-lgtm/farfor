@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{{ title }}</h1>
+<form method="post" class="form-card">
+  {{ form.hidden_tag() }}
+  {{ form.title.label }} {{ form.title() }}
+  {{ form.period.label }} {{ form.period() }}
+  {{ form.material.label }} {{ form.material() }}
+  {{ form.comments.label }} {{ form.comments(rows=5) }}
+  {{ form.manufacturer_id.label }} {{ form.manufacturer_id() }}
+  {{ form.sculptor_id.label }} {{ form.sculptor_id() }}
+  {{ form.artist_id.label }} {{ form.artist_id() }}
+  {{ form.shape_id.label }} {{ form.shape_id() }}
+  {{ form.painting_style_id.label }} {{ form.painting_style_id() }}
+  {{ form.publication_status.label }} {{ form.publication_status() }}
+  {{ form.visibility.label }} {{ form.visibility() }}
+  {{ form.submit(class='btn') }}
+</form>
+
+{% if item %}
+  <section>
+    <h2>Фотографии</h2>
+    <form method="post" enctype="multipart/form-data" action="{{ url_for('items.upload_photos', item_id=item.id) }}" class="form-card">
+      {{ photo_form.hidden_tag() }}
+      {{ photo_form.photos.label }} {{ photo_form.photos() }}
+      {{ photo_form.submit(class='btn') }}
+    </form>
+    <div class="gallery">
+    {% for photo in item.photos %}
+      <div>
+        <img src="{{ url_for('static', filename='uploads/' ~ photo.filename) }}" alt="{{ photo.original_name }}">
+        <form method="post" action="{{ url_for('items.delete_photo', photo_id=photo.id) }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="btn danger">Удалить фото</button>
+        </form>
+      </div>
+    {% endfor %}
+    </div>
+  </section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Пользователи</h1>
+<ul>
+  {% for user in pagination.items %}
+    <li>{{ user.username }} — {{ user.email }} {% if user.is_admin %}(admin){% endif %}</li>
+  {% endfor %}
+</ul>
+{% endblock %}
