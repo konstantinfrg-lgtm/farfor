@@ -136,3 +136,11 @@ LOGOUT_REDIRECT_URL = 'catalog:home'
 # CSRF settings
 import os
 CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', 'https://farfor-production.up.railway.app').split(',')
+
+
+# Email settings (console backend for logging)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'noreply@farfor.ru'
+
+# Password reset settings
+PASSWORD_RESET_TIMEOUT = 86400  # 24 hours
