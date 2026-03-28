@@ -24,16 +24,26 @@
                         {% endfor %}
                     </div>
                     {% endfor %}
-                    <button type="submit" class="btn btn-primary w-100">{% if title == 'Вход' %}Войти{% else %}Зарегистрироваться{% endif %}</button>
+                    <button type="submit" class="btn btn-primary w-100">
+                        {% if title == 'Вход' %}Войти{% else %}Зарегистрироваться{% endif %}
+                    </button>
                 </form>
+                {% if title == 'Вход' %}
                 <hr>
                 <div class="text-center">
-                    {% if title == 'Вход' %}
-                    <p>Нет аккаунта? <a href="{% url 'accounts:register' %}">Зарегистрироваться</a></p>
-                    {% else %}
-                    <p>Уже есть аккаунт? <a href="{% url 'accounts:login' %}">Войти</a></p>
-                    {% endif %}
+                    <a href="{% url 'accounts:password_reset' %}" class="text-muted small">Забыли пароль?</a>
                 </div>
+                <div class="text-center mt-2">
+                    <span class="text-muted small">Нет аккаунта?</span>
+                    <a href="{% url 'accounts:register' %}" class="small">Зарегистрироваться</a>
+                </div>
+                {% elif title == 'Регистрация' %}
+                <hr>
+                <div class="text-center">
+                    <span class="text-muted small">Уже есть аккаунт?</span>
+                    <a href="{% url 'accounts:login' %}" class="small">Войти</a>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
