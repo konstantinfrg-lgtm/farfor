@@ -81,3 +81,27 @@ def profile(request):
         'private_count': private_count,
     }
     return render(request, 'accounts/profile.html', context)
+
+
+@login_required
+def password_change(request):
+    if request.method == 'POST':
+        old_password = request.POST.get('old_password')
+        new_password1 = request.POST.get('new_password1')
+        new_password2 = request.POST.get('new_password2')
+
+        user = authenticate(username=request.user.username, password=old_password)
+        if user is None:
+            messages.error(request, 'Неверный текущий пароль.')
+        elif new_password1 != new_password2:
+            messages.error(request, 'Пароли не совпадают.')
+        elif len(new_password1) < 8:
+            messages.error(request, 'Пароль должен содержать не менее 8 символов.')
+        else:
+            user.set_password(new_password1)
+            user.save()
+            login(request, user)
+            messages.success(request, 'Пароль успешно изменён!')
+            return redirect('accounts:profile')
+
+    return render(request, 'accounts/password_change.html', {})
