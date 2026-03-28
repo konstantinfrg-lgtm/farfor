@@ -39,7 +39,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
@@ -47,8 +47,8 @@
             </div>
             <div class="card-body">
                 <p>Количество предметов: <strong>{{ user.milk_jugs.count }}</strong></p>
-                <p>Публичных: <strong>{{ user.milk_jugs.filter visibility='public' count }}</strong></p>
-                <p>Приватных: <strong>{{ user.milk_jugs.filter visibility='private' count }}</strong></p>
+                <p>Публичных: <strong>{{ public_count }}</strong></p>
+                <p>Приватных: <strong>{{ private_count }}</strong></p>
                 <hr>
                 <a href="{% url 'catalog:my_collection' %}" class="btn btn-outline-primary">Перейти к моей коллекции</a>
                 <a href="{% url 'catalog:milk_jug_create' %}" class="btn btn-success">Добавить молочник</a>
