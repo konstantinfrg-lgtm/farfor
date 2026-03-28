@@ -132,3 +132,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = 'accounts:login'
 LOGIN_REDIRECT_URL = 'catalog:collection_list'
 LOGOUT_REDIRECT_URL = 'catalog:home'
+
+# CSRF settings
+import os
+CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', 'https://farfor-production.up.railway.app').split(',')
