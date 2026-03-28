@@ -1,0 +1,76 @@
+{% extends 'catalog/base.html' %}
+
+{% block title %}{{ milk_jug.name }} - Коллекция фарфоровых молочников{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-5 mb-4">
+    {% if main_photo %}
+      <img src="{{ main_photo.image.url }}" class="img-fluid rounded shadow" alt="{{ milk_jug.name }}">
+    {% else %}
+      <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height:300px;">
+        <span class="text-muted">Нет фото</span>
+      </div>
+    {% endif %}
+    {% if photos.count > 1 %}
+    <div class="d-flex flex-wrap gap-2 mt-2">
+      {% for photo in photos %}
+        <img src="{{ photo.image.url }}" class="rounded" style="height:60px;width:60px;object-fit:cover;" alt="">
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="col-md-7">
+    <h2>{{ milk_jug.name }}</h2>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
+    <table class="table table-bordered table-sm">
+      <tbody>
+        {% if milk_jug.manufacturer %}
+        <tr><th>Производитель</th><td>{{ milk_jug.manufacturer.name }}</td></tr>
+        {% endif %}
+        {% if milk_jug.sculptor %}
+        <tr><th>Скульптор</th><td>{{ milk_jug.sculptor.name }}</td></tr>
+        {% endif %}
+        {% if milk_jug.artist %}
+        <tr><th>Художник</th><td>{{ milk_jug.artist.name }}</td></tr>
+        {% endif %}
+        {% if milk_jug.form %}
+        <tr><th>Форма</th><td>{{ milk_jug.form.name }}</td></tr>
+        {% endif %}
+        {% if milk_jug.painting %}
+        <tr><th>Роспись</th><td>{{ milk_jug.painting.name }}</td></tr>
+        {% endif %}
+        {% if milk_jug.year %}
+        <tr><th>Год</th><td>{{ milk_jug.year }}</td></tr>
+        {% endif %}
+        <tr><th>Видимость</th><td>{{ milk_jug.get_visibility_display }}</td></tr>
+        <tr><th>Владелец</th><td>{{ milk_jug.owner.username }}</td></tr>
+      </tbody>
+    </table>
+
+    {% if milk_jug.comments %}
+    <div class="mt-2">
+      <strong>Комментарий:</strong>
+      <p>{{ milk_jug.comments }}</p>
+    </div>
+    {% endif %}
+
+    {% if request.user == milk_jug.owner or request.user.is_staff %}
+    <div class="d-flex gap-2 mt-3">
+      <a href="{% url 'catalog:milk_jug_update' milk_jug.pk %}" class="btn btn-warning btn-sm">Редактировать</a>
+      <a href="{% url 'catalog:photo_upload' milk_jug.pk %}" class="btn btn-success btn-sm">Добавить фото</a>
+      <a href="{% url 'catalog:milk_jug_delete' milk_jug.pk %}" class="btn btn-danger btn-sm">Удалить</a>
+    </div>
+    {% endif %}
+
+    <a href="{% url 'catalog:collection_list' %}" class="btn btn-outline-secondary btn-sm mt-3">Назад к каталогу</a>
+  </div>
+</div>
+{% endblock %}
