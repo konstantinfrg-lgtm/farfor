@@ -1,0 +1,59 @@
+{% extends 'catalog/base.html' %}
+
+{% block title %}Профиль - Коллекция фарфоровых молочников{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 mb-4">
+        <h1>Профиль пользователя</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Информация о пользователе</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Имя пользователя</label>
+                        <input type="text" class="form-control" value="{{ user.username }}" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" name="email" class="form-control" value="{{ user.email }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="first_name" class="form-label">Имя</label>
+                        <input type="text" name="first_name" class="form-control" value="{{ user.first_name }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="last_name" class="form-label">Фамилия</label>
+                        <input type="text" name="last_name" class="form-control" value="{{ user.last_name }}">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Моя коллекция</h5>
+            </div>
+            <div class="card-body">
+                <p>Количество предметов: <strong>{{ user.milk_jugs.count }}</strong></p>
+                <p>Публичных: <strong>{{ user.milk_jugs.filter visibility='public' count }}</strong></p>
+                <p>Приватных: <strong>{{ user.milk_jugs.filter visibility='private' count }}</strong></p>
+                <hr>
+                <a href="{% url 'catalog:my_collection' %}" class="btn btn-outline-primary">Перейти к моей коллекции</a>
+                <a href="{% url 'catalog:milk_jug_create' %}" class="btn btn-success">Добавить молочник</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,126 @@
+{% extends 'catalog/base.html' %}
+
+{% block title %}Каталог - Коллекция фарфоровых молочников{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 mb-4">
+        <h1>{% if mode == 'my' %}Моя коллекция{% elif mode == 'all_public' %}Все публичные коллекции{% else %}Каталог{% endif %}</h1>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Фильтры -->
+    <div class="col-md-3 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Фильтры</h5>
+            </div>
+            <div class="card-body">
+                <form method="get" action="">
+                    <div class="mb-3">
+                        <label for="id_manufacturer" class="form-label">Производитель</label>
+                        {{ filter_form.manufacturer }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_sculptor" class="form-label">Скульптор</label>
+                        {{ filter_form.sculptor }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_artist" class="form-label">Художник</label>
+                        {{ filter_form.artist }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_form" class="form-label">Форма</label>
+                        {{ filter_form.form }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_painting" class="form-label">Роспись</label>
+                        {{ filter_form.painting }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_has_photos" class="form-label">
+                            {{ filter_form.has_photos }} Только с фото
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Применить</button>
+                    <a href="{% url 'catalog:collection_list' %}" class="btn btn-outline-secondary w-100 mt-2">Сбросить</a>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Список -->
+    <div class="col-md-9">
+        <!-- Поиск и сортировка -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <form method="get" action="" class="d-flex">
+                    <input type="text" name="q" class="form-control me-2" placeholder="Поиск..." value="{{ search_query }}">
+                    <button type="submit" class="btn btn-outline-primary">Найти</button>
+                </form>
+            </div>
+            <div class="col-md-6 text-end">
+                <select class="form-select d-inline-block w-auto" onchange="location.href=this.value">
+                    <option value="?sort=-created_at" {% if sort_by == '-created_at' %}selected{% endif %}>По дате (новые)</option>
+                    <option value="?sort=name" {% if sort_by == 'name' %}selected{% endif %}>По названию</option>
+                    <option value="?sort=year" {% if sort_by == 'year' %}selected{% endif %}>По году</option>
+                    <option value="?sort=manufacturer__name" {% if sort_by == 'manufacturer__name' %}selected{% endif %}>По производителю</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Карточки -->
+        {% if page_obj %}
+        <div class="row">
+            {% for item in page_obj %}
+            <div class="col-md-4 col-sm-6 mb-4">
+                <div class="card milk-jug-card h-100">
+                    {% if item.photos.first %}
+                    <img src="{{ item.photos.first.image.url }}" class="card-img-top" alt="{{ item }}">
+                    {% else %}
+                    <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 250px;">
+                        <span class="text-white">Нет фото</span>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item }}</h5>
+                        {% if item.manufacturer %}
+                        <p class="card-text text-muted">{{ item.manufacturer }}</p>
+                        {% endif %}
+                        {% if item.year %}
+                        <p class="card-text"><small class="text-muted">{{ item.year }}</small></p>
+                        {% endif %}
+                        <a href="{% url 'catalog:milk_jug_detail' item.pk %}" class="btn btn-sm btn-outline-primary">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Пагинация -->
+        <nav>
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+                </li>
+                {% endif %}
+                
+                <li class="page-item active">
+                    <span class="page-link">{{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+                </li>
+                
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% else %}
+        <div class="alert alert-info">Ничего не найдено</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
