@@ -9,7 +9,7 @@ from django import forms
 
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(required=True)
-    
+
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
@@ -18,7 +18,7 @@ class RegisterForm(UserCreationForm):
 def login_view(request):
     if request.user.is_authenticated:
         return redirect('catalog:collection_list')
-    
+
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
@@ -29,7 +29,7 @@ def login_view(request):
             return redirect(next_url)
     else:
         form = AuthenticationForm()
-    
+
     context = {'form': form, 'title': 'Вход'}
     return render(request, 'accounts/auth_form.html', context)
 
@@ -37,7 +37,7 @@ def login_view(request):
 def register(request):
     if request.user.is_authenticated:
         return redirect('catalog:collection_list')
-    
+
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -47,7 +47,7 @@ def register(request):
             return redirect('catalog:my_collection')
     else:
         form = RegisterForm()
-    
+
     context = {'form': form, 'title': 'Регистрация'}
     return render(request, 'accounts/auth_form.html', context)
 
@@ -69,6 +69,15 @@ def profile(request):
         user.save()
         messages.success(request, 'Профиль обновлен!')
         return redirect('accounts:profile')
-    
-    context = {'user': request.user}
+
+    user = request.user
+    milk_jugs = user.milk_jugs.all()
+    public_count = milk_jugs.filter(visibility='public').count()
+    private_count = milk_jugs.filter(visibility='private').count()
+
+    context = {
+        'user': user,
+        'public_count': public_count,
+        'private_count': private_count,
+    }
     return render(request, 'accounts/profile.html', context)
