@@ -1,14 +1,14 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed, FileField, FileRequired
 from wtforms import BooleanField, EmailField, PasswordField, SelectField, StringField, SubmitField, TextAreaField
-from wtforms.validators import DataRequired, Email, EqualTo, Length, Optional
+from wtforms.validators import DataRequired, EqualTo, Length, Optional
 
 from .models import PublicationStatus, Visibility
 
 
 class RegisterForm(FlaskForm):
     username = StringField("Логин", validators=[DataRequired(), Length(min=3, max=80)])
-    email = EmailField("Email", validators=[DataRequired(), Email(), Length(max=255)])
+    email = EmailField("Email", validators=[DataRequired(), Length(max=255)])
     full_name = StringField("Имя", validators=[Optional(), Length(max=255)])
     password = PasswordField("Пароль", validators=[DataRequired(), Length(min=8)])
     password2 = PasswordField("Повторите пароль", validators=[DataRequired(), EqualTo("password")])
@@ -16,7 +16,7 @@ class RegisterForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
-    email = EmailField("Email", validators=[DataRequired(), Email()])
+    email = EmailField("Email", validators=[DataRequired(), Length(max=255)])
     password = PasswordField("Пароль", validators=[DataRequired()])
     remember = BooleanField("Запомнить меня")
     submit = SubmitField("Войти")

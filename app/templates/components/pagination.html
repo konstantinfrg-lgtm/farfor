@@ -6,7 +6,7 @@
           {% if page == pagination.page %}
             <span class="page active">{{ page }}</span>
           {% else %}
-            <a class="page" href="{{ url_for(request.endpoint, **request.view_args, page=page, **request.args.to_dict()) }}">{{ page }}</a>
+            <a class="page" href="{{ url_for(request.endpoint, page=page) }}">{{ page }}</a>
           {% endif %}
         {% else %}
           <span class="page">…</span>
