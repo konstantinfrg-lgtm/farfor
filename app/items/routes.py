@@ -1,12 +1,19 @@
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import Blueprint, abort, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 
 from ..extensions import db
 from ..forms import ItemForm, UploadPhotoForm
-from ..models import Artist, Item, Manufacturer, PaintingStyle, Photo, Sculptor, Shape
+from ..models import Artist, Item, Manufacturer, PaintingStyle, Photo, Sculptor, Shape, Visibility
 from ..services.file_service import remove_image, save_image
 
 items_bp = Blueprint("items", __name__)
+
+
+def _get_or_404(model, object_id: int):
+    obj = db.session.get(model, object_id)
+    if obj is None:
+        abort(404)
+    return obj
 
 
 def _setup_lookup_choices(form):
@@ -24,9 +31,13 @@ def _can_edit(item: Item) -> bool:
 
 @items_bp.route("/<int:item_id>")
 def detail(item_id):
-    item = Item.query.get_or_404(item_id)
+    item = _get_or_404(Item, item_id)
     if not _can_edit(item):
-        if item.visibility != "public" or item.publication_status != "published":
+        if item.publication_status != "published":
+            return render_template("errors/403.html"), 403
+        if item.visibility == Visibility.PRIVATE:
+            return render_template("errors/403.html"), 403
+        if item.visibility == Visibility.REGISTERED and not current_user.is_authenticated:
             return render_template("errors/403.html"), 403
     return render_template("items/detail.html", item=item)
 
@@ -62,7 +73,7 @@ def create():
 @items_bp.route("/<int:item_id>/edit", methods=["GET", "POST"])
 @login_required
 def edit(item_id):
-    item = Item.query.get_or_404(item_id)
+    item = _get_or_404(Item, item_id)
     if not _can_edit(item):
         return render_template("errors/403.html"), 403
 
@@ -87,7 +98,7 @@ def edit(item_id):
 @items_bp.route("/<int:item_id>/delete", methods=["POST"])
 @login_required
 def delete(item_id):
-    item = Item.query.get_or_404(item_id)
+    item = _get_or_404(Item, item_id)
     if not _can_edit(item):
         return render_template("errors/403.html"), 403
 
@@ -102,7 +113,7 @@ def delete(item_id):
 @items_bp.route("/<int:item_id>/photos", methods=["POST"])
 @login_required
 def upload_photos(item_id):
-    item = Item.query.get_or_404(item_id)
+    item = _get_or_404(Item, item_id)
     if not _can_edit(item):
         return render_template("errors/403.html"), 403
 
@@ -133,7 +144,7 @@ def upload_photos(item_id):
 @items_bp.route("/photos/<int:photo_id>/delete", methods=["POST"])
 @login_required
 def delete_photo(photo_id):
-    photo = Photo.query.get_or_404(photo_id)
+    photo = _get_or_404(Photo, photo_id)
     if not _can_edit(photo.item):
         return render_template("errors/403.html"), 403
 

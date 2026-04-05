@@ -4,6 +4,11 @@
 {% block content %}
 <h1>Каталог</h1>
 <form method="get" class="filter-grid">
+  <select name="mode">
+    <option value="all" {% if request.args.get('mode', 'all')=='all' %}selected{% endif %}>Все коллекции</option>
+    <option value="my" {% if request.args.get('mode')=='my' %}selected{% endif %}>Моя коллекция</option>
+    <option value="public" {% if request.args.get('mode')=='public' %}selected{% endif %}>Публичная коллекция</option>
+  </select>
   <input type="text" name="q" value="{{ request.args.get('q','') }}" placeholder="Поиск по названию, материалу, комментариям">
   <input type="text" name="period" value="{{ request.args.get('period','') }}" placeholder="Период">
   <select name="manufacturer_id"><option value="">Производитель</option>{% for x in filters.manufacturers %}<option value="{{ x.id }}" {% if request.args.get('manufacturer_id', type=int)==x.id %}selected{% endif %}>{{ x.name }}</option>{% endfor %}</select>
@@ -33,5 +38,5 @@
   {% endfor %}
 </div>
 
-{{ render_pagination(pagination) }}
+{{ render_pagination(pagination, pagination_query) }}
 {% endblock %}

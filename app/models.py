@@ -15,12 +15,14 @@ class TimestampMixin:
 
 class Visibility:
     PUBLIC = "public"
+    REGISTERED = "registered"
     PRIVATE = "private"
 
 
 class PublicationStatus:
     DRAFT = "draft"
     PUBLISHED = "published"
+    HIDDEN = "hidden"
 
 
 class User(UserMixin, TimestampMixin, db.Model):

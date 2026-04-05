@@ -17,10 +17,34 @@ SORT_MAP = {
 def build_catalog_query(current_user, args):
     query = Item.query
 
-    if not (current_user.is_authenticated and current_user.is_admin):
+    mode = args.get("mode", "all")
+    if mode not in {"my", "all", "public"}:
+        mode = "all"
+
+    is_admin = current_user.is_authenticated and current_user.is_admin
+    is_authenticated = current_user.is_authenticated
+
+    if mode == "my":
+        if is_authenticated:
+            query = query.filter(Item.owner_id == current_user.id)
+        else:
+            mode = "public"
+
+    if mode == "public":
+        query = query.filter(
+            Item.publication_status == PublicationStatus.PUBLISHED,
+            Item.visibility == Visibility.PUBLIC,
+        )
+    elif mode == "all" and not is_admin:
         query = query.filter(Item.publication_status == PublicationStatus.PUBLISHED)
-        if current_user.is_authenticated:
-            query = query.filter(or_(Item.visibility == Visibility.PUBLIC, Item.owner_id == current_user.id))
+        if is_authenticated:
+            query = query.filter(
+                or_(
+                    Item.visibility == Visibility.PUBLIC,
+                    Item.visibility == Visibility.REGISTERED,
+                    Item.owner_id == current_user.id,
+                )
+            )
         else:
             query = query.filter(Item.visibility == Visibility.PUBLIC)
 
