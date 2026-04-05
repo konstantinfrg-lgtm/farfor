@@ -1,4 +1,4 @@
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import Blueprint, abort, flash, redirect, render_template, request, url_for
 from flask_login import login_required
 
 from ..extensions import db
@@ -15,6 +15,13 @@ LOOKUP_MODELS = {
     "shapes": Shape,
     "painting_styles": PaintingStyle,
 }
+
+
+def _get_or_404(model, object_id: int):
+    obj = db.session.get(model, object_id)
+    if obj is None:
+        abort(404)
+    return obj
 
 
 @admin_bp.route("/")
@@ -76,7 +83,7 @@ def lookup_delete(kind, record_id):
     model = LOOKUP_MODELS.get(kind)
     if not model:
         return render_template("errors/404.html"), 404
-    record = model.query.get_or_404(record_id)
+    record = _get_or_404(model, record_id)
     db.session.delete(record)
     db.session.commit()
     flash("Запись удалена.", "info")

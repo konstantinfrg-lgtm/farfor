@@ -1,0 +1,468 @@
+openapi: 3.0.3
+info:
+  title: Farfor API
+  version: 1.0.0
+  description: API для каталога коллекции фарфоровых молочников.
+servers:
+  - url: /api
+
+tags:
+  - name: Auth
+  - name: Profile
+  - name: Items
+  - name: Photos
+  - name: Dictionaries
+  - name: Admin
+
+paths:
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Регистрация пользователя
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Пользователь создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '422':
+          description: Ошибка валидации
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Вход
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Успешный вход
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Неверные учетные данные
+  /auth/logout:
+    post:
+      tags: [Auth]
+      summary: Выход
+      security:
+        - cookieAuth: []
+      responses:
+        '204':
+          description: Выход выполнен
+
+  /profile:
+    get:
+      tags: [Profile]
+      summary: Профиль текущего пользователя
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Профиль
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    patch:
+      tags: [Profile]
+      summary: Обновление профиля
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfileUpdateRequest'
+      responses:
+        '200':
+          description: Профиль обновлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /items:
+    get:
+      tags: [Items]
+      summary: Список карточек
+      parameters:
+        - in: query
+          name: q
+          schema: { type: string }
+          description: Поиск по тексту
+        - in: query
+          name: manufacturer_id
+          schema: { type: integer }
+        - in: query
+          name: sculptor_id
+          schema: { type: integer }
+        - in: query
+          name: artist_id
+          schema: { type: integer }
+        - in: query
+          name: form_id
+          schema: { type: integer }
+        - in: query
+          name: painting_id
+          schema: { type: integer }
+        - in: query
+          name: country_id
+          schema: { type: integer }
+        - in: query
+          name: material_id
+          schema: { type: integer }
+        - in: query
+          name: owner_id
+          schema: { type: integer }
+        - in: query
+          name: has_photo
+          schema: { type: boolean }
+        - in: query
+          name: publication_status
+          schema: { $ref: '#/components/schemas/PublicationStatus' }
+        - in: query
+          name: visibility_status
+          schema: { $ref: '#/components/schemas/VisibilityStatus' }
+        - in: query
+          name: sort
+          schema:
+            type: string
+            enum: [created_at, title, manufacturer, creation_year, updated_at]
+        - in: query
+          name: order
+          schema:
+            type: string
+            enum: [asc, desc]
+        - in: query
+          name: page
+          schema: { type: integer, minimum: 1, default: 1 }
+        - in: query
+          name: per_page
+          schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+      responses:
+        '200':
+          description: Список карточек
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedItemsResponse'
+    post:
+      tags: [Items]
+      summary: Создание карточки
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemCreateRequest'
+      responses:
+        '201':
+          description: Карточка создана
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+
+  /items/{id}:
+    get:
+      tags: [Items]
+      summary: Получить карточку
+      parameters:
+        - $ref: '#/components/parameters/ItemId'
+      responses:
+        '200':
+          description: Карточка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '404':
+          description: Не найдено
+    patch:
+      tags: [Items]
+      summary: Обновить карточку
+      security:
+        - cookieAuth: []
+      parameters:
+        - $ref: '#/components/parameters/ItemId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemUpdateRequest'
+      responses:
+        '200':
+          description: Обновлено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '403':
+          description: Нет прав
+    delete:
+      tags: [Items]
+      summary: Удалить карточку
+      security:
+        - cookieAuth: []
+      parameters:
+        - $ref: '#/components/parameters/ItemId'
+      responses:
+        '204':
+          description: Удалено
+
+  /items/{id}/photos:
+    post:
+      tags: [Photos]
+      summary: Загрузка фото в карточку
+      security:
+        - cookieAuth: []
+      parameters:
+        - $ref: '#/components/parameters/ItemId'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Фото загружено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Photo'
+
+  /photos/{id}:
+    delete:
+      tags: [Photos]
+      summary: Удалить фото
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '204':
+          description: Фото удалено
+
+  /dictionaries/manufacturers:
+    get:
+      tags: [Dictionaries]
+      summary: Справочник производителей
+      responses:
+        '200':
+          description: ОК
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DictionaryListResponse'
+
+  /admin/dictionaries/manufacturers:
+    post:
+      tags: [Admin]
+      summary: Добавить производителя
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DictionaryCreateRequest'
+      responses:
+        '201':
+          description: Создано
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: session
+
+  parameters:
+    ItemId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+
+  schemas:
+    VisibilityStatus:
+      type: string
+      enum: [private, registered, public]
+
+    PublicationStatus:
+      type: string
+      enum: [draft, published, hidden]
+
+    RegisterRequest:
+      type: object
+      required: [name, email, password, password_confirmation]
+      properties:
+        name: { type: string, maxLength: 120 }
+        email: { type: string, format: email }
+        password: { type: string, minLength: 8 }
+        password_confirmation: { type: string, minLength: 8 }
+
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email: { type: string, format: email }
+        password: { type: string }
+
+    ProfileUpdateRequest:
+      type: object
+      properties:
+        name: { type: string }
+        bio: { type: string }
+        visibility_default:
+          $ref: '#/components/schemas/VisibilityStatus'
+
+    User:
+      type: object
+      required: [id, name, email, role, created_at, updated_at]
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        email: { type: string, format: email }
+        role: { type: string }
+        bio: { type: string, nullable: true }
+        avatar_url: { type: string, format: uri, nullable: true }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+
+    ItemCreateRequest:
+      type: object
+      required:
+        - manufacturer_id
+        - sculptor_id
+        - artist_id
+        - form_id
+        - painting_id
+        - comments
+      properties:
+        title: { type: string }
+        manufacturer_id: { type: integer }
+        sculptor_id: { type: integer }
+        artist_id: { type: integer }
+        form_id: { type: integer }
+        painting_id: { type: integer }
+        creation_year: { type: integer, nullable: true }
+        creation_period: { type: string, nullable: true }
+        comments: { type: string }
+        visibility_status:
+          $ref: '#/components/schemas/VisibilityStatus'
+        publication_status:
+          $ref: '#/components/schemas/PublicationStatus'
+
+    ItemUpdateRequest:
+      allOf:
+        - $ref: '#/components/schemas/ItemCreateRequest'
+
+    Photo:
+      type: object
+      required: [id, item_id, file_url, created_at]
+      properties:
+        id: { type: integer }
+        item_id: { type: integer }
+        file_url: { type: string, format: uri }
+        preview_url: { type: string, format: uri, nullable: true }
+        is_main: { type: boolean }
+        sort_order: { type: integer }
+        created_at: { type: string, format: date-time }
+
+    Item:
+      type: object
+      required: [id, user_id, visibility_status, publication_status, created_at, updated_at]
+      properties:
+        id: { type: integer }
+        user_id: { type: integer }
+        title: { type: string, nullable: true }
+        manufacturer_id: { type: integer, nullable: true }
+        sculptor_id: { type: integer, nullable: true }
+        artist_id: { type: integer, nullable: true }
+        form_id: { type: integer, nullable: true }
+        painting_id: { type: integer, nullable: true }
+        comments: { type: string, nullable: true }
+        visibility_status:
+          $ref: '#/components/schemas/VisibilityStatus'
+        publication_status:
+          $ref: '#/components/schemas/PublicationStatus'
+        photos:
+          type: array
+          items:
+            $ref: '#/components/schemas/Photo'
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+
+    PaginatedItemsResponse:
+      type: object
+      required: [items, pagination]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+        pagination:
+          type: object
+          required: [page, per_page, total]
+          properties:
+            page: { type: integer }
+            per_page: { type: integer }
+            total: { type: integer }
+
+    AuthResponse:
+      type: object
+      required: [user]
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+
+    DictionaryCreateRequest:
+      type: object
+      required: [name]
+      properties:
+        name: { type: string }
+        description: { type: string, nullable: true }
+
+    DictionaryValue:
+      type: object
+      required: [id, name]
+      properties:
+        id: { type: integer }
+        name: { type: string }
+
+    DictionaryListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/DictionaryValue'
