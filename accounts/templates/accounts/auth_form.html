@@ -1,0 +1,51 @@
+{% extends 'catalog/base.html' %}
+
+{% block title %}{{ title }} - Коллекция фарфоровых молочников{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0 text-center">{{ title }}</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="mb-3">
+                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                        {% endif %}
+                        {% for error in field.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary w-100">
+                        {% if title == 'Вход' %}Войти{% else %}Зарегистрироваться{% endif %}
+                    </button>
+                </form>
+                {% if title == 'Вход' %}
+                <hr>
+                <div class="text-center">
+                    <a href="{% url 'accounts:password_reset' %}" class="text-muted small">Забыли пароль?</a>
+                </div>
+                <div class="text-center mt-2">
+                    <span class="text-muted small">Нет аккаунта?</span>
+                    <a href="{% url 'accounts:register' %}" class="small">Зарегистрироваться</a>
+                </div>
+                {% elif title == 'Регистрация' %}
+                <hr>
+                <div class="text-center">
+                    <span class="text-muted small">Уже есть аккаунт?</span>
+                    <a href="{% url 'accounts:login' %}" class="small">Войти</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

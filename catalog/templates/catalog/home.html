@@ -1,0 +1,83 @@
+{% extends 'catalog/base.html' %}
+
+{% block title %}Главная - Коллекция фарфоровых молочников{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 text-center mb-5">
+        <h1 class="display-4">🏺 Коллекция фарфоровых молочников</h1>
+        <p class="lead text-muted">Добро пожаловать в каталог коллекции фарфоровых молочников</p>
+        <hr class="my-4">
+        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+            <a href="{% url 'catalog:collection_list' %}" class="btn btn-primary btn-lg">Смотреть каталог</a>
+            {% if not user.is_authenticated %}
+            <a href="{% url 'accounts:register' %}" class="btn btn-outline-secondary btn-lg">Зарегистрироваться</a>
+            {% else %}
+            <a href="{% url 'catalog:milk_jug_create' %}" class="btn btn-outline-success btn-lg">Добавить молочник</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% if recent_items %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">Последние добавления</h2>
+    </div>
+    {% for item in recent_items %}
+    <div class="col-md-4 col-sm-6 mb-4">
+        <div class="card milk-jug-card h-100">
+            {% if item.photos.first %}
+            <img src="{{ item.photos.first.image.url }}" class="card-img-top" alt="{{ item }}">
+            {% else %}
+            <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 250px;">
+                <span class="text-white">Нет фото</span>
+            </div>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ item }}</h5>
+                {% if item.manufacturer %}
+                <p class="card-text text-muted">{{ item.manufacturer }}</p>
+                {% endif %}
+                <a href="{% url 'catalog:milk_jug_detail' item.pk %}" class="btn btn-sm btn-outline-primary">Подробнее</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="row mt-5">
+    <div class="col-md-4 mb-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">📚 Каталог</h5>
+                <p class="card-text">Изучите полную коллекцию молочников с возможностью фильтрации и поиска</p>
+                <a href="{% url 'catalog:collection_list' %}" class="btn btn-primary">Перейти в каталог</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">➕ Добавить</h5>
+                <p class="card-text">Добавьте свои молочники в коллекцию с фотографиями и описанием</p>
+                {% if user.is_authenticated %}
+                <a href="{% url 'catalog:milk_jug_create' %}" class="btn btn-success">Добавить молочник</a>
+                {% else %}
+                <a href="{% url 'accounts:register' %}" class="btn btn-outline-success">Зарегистрироваться</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">🔍 Поиск</h5>
+                <p class="card-text">Найдите нужные молочники по производителю, скульптору или художнику</p>
+                <a href="{% url 'catalog:collection_list' %}" class="btn btn-primary">Искать</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
