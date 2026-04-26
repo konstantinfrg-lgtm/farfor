@@ -1,0 +1,146 @@
+.collection-page {
+  min-height: calc(100vh - 80px);
+  background: linear-gradient(135deg, #F5F5F5 0%, #EFEBE9 100%);
+  padding: 2rem;
+}
+
+.collection-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.collection-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.collection-actions {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.collection-actions .search-bar {
+  flex: 1;
+  min-width: 280px;
+  margin: 0;
+}
+
+.add-btn {
+  background: linear-gradient(135deg, #FFA726 0%, #FB8C00 100%);
+  color: #3E2723;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 167, 38, 0.4);
+}
+
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.item-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.item-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.action-btn {
+  padding: 0.65rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.action-btn.public {
+  background: #E8F5E9;
+  color: #2E7D32;
+}
+
+.action-btn.private {
+  background: #EFEBE9;
+  color: #6D4C41;
+}
+
+.action-btn.edit {
+  background: #E3F2FD;
+  color: #1976D2;
+}
+
+.action-btn.delete {
+  background: #FFEBEE;
+  color: #C62828;
+}
+
+.action-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(0.95);
+}
+
+.loading,
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.loading {
+  color: #8D6E63;
+  font-size: 1.1rem;
+}
+
+.empty-state .empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+  font-family: 'Playfair Display', serif;
+  color: #5D4037;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+}
+
+.empty-state p {
+  color: #8D6E63;
+  margin: 0 0 1.5rem 0;
+}
+
+@media (max-width: 768px) {
+  .collection-page {
+    padding: 1rem;
+  }
+
+  .collection-actions {
+    flex-direction: column;
+  }
+
+  .items-grid {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+}

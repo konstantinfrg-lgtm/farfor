@@ -1,0 +1,269 @@
+.item-detail-page {
+  min-height: calc(100vh - 80px);
+  background: linear-gradient(135deg, #F5F5F5 0%, #EFEBE9 100%);
+  padding: 2rem;
+}
+
+.item-detail-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.back-button {
+  background: transparent;
+  border: 2px solid #E0E0E0;
+  color: #5D4037;
+  padding: 0.65rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.back-button:hover {
+  border-color: #8D6E63;
+  background: #FAFAFA;
+}
+
+.item-detail-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  background: #fff;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+.item-gallery {
+  position: sticky;
+  top: 100px;
+}
+
+.main-image-container {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #F5F5F5;
+  margin-bottom: 1rem;
+}
+
+.main-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.thumbnail-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+}
+
+.thumbnail {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  cursor: pointer;
+  padding: 0;
+  background: #F5F5F5;
+  transition: all 0.2s;
+}
+
+.thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumbnail:hover {
+  border-color: #BCAAA4;
+}
+
+.thumbnail.active {
+  border-color: #8D6E63;
+}
+
+.item-details {
+  padding: 1rem;
+}
+
+.item-header {
+  margin-bottom: 1.5rem;
+}
+
+.detail-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #3E2723;
+  margin: 0 0 0.75rem 0;
+  line-height: 1.2;
+}
+
+.detail-subtitle {
+  color: #8D6E63;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.private-badge {
+  display: inline-block;
+  background: #EFEBE9;
+  color: #6D4C41;
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-top: 0.75rem;
+}
+
+.detail-section {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #EFEBE9;
+}
+
+.detail-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.section-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #5D4037;
+  margin: 0 0 1rem 0;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.detail-label {
+  font-size: 0.85rem;
+  color: #A1887F;
+  font-weight: 500;
+}
+
+.detail-value {
+  font-size: 1rem;
+  color: #5D4037;
+  font-weight: 400;
+}
+
+.detail-location {
+  color: #5D4037;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.detail-comment {
+  color: #5D4037;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.owner-info {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #EFEBE9;
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.owner-label {
+  color: #A1887F;
+  font-size: 0.95rem;
+}
+
+.owner-name {
+  color: #6D4C41;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #8D6E63;
+  font-size: 1.1rem;
+}
+
+.not-found {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: #fff;
+  border-radius: 12px;
+}
+
+.not-found h2 {
+  font-family: 'Playfair Display', serif;
+  color: #5D4037;
+  margin: 0 0 1.5rem 0;
+}
+
+.back-btn {
+  background: linear-gradient(135deg, #8D6E63 0%, #6D4C41 100%);
+  color: #fff;
+  border: none;
+  padding: 0.875rem 2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.back-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(141, 110, 99, 0.3);
+}
+
+@media (max-width: 900px) {
+  .item-detail-content {
+    grid-template-columns: 1fr;
+  }
+
+  .item-gallery {
+    position: static;
+  }
+
+  .detail-title {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .item-detail-page {
+    padding: 1rem;
+  }
+
+  .item-detail-content {
+    padding: 1.5rem;
+  }
+
+  .thumbnail-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
