@@ -1,0 +1,20 @@
+```
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+
+# Dependencies
+backend/requirements.txt
+
+# Mobile app
+.mobile/
+.dart_tool/
+.pub/
+build/
+ios/.symlinks/
+libCachedImageData/
+generated/
+```

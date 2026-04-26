@@ -1,0 +1,55 @@
+name: milk_collection
+description: Приложение для коллекционеров фарфоровых молочников и сливочников
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # HTTP client
+  http: ^1.1.0
+  dio: ^5.3.3
+  
+  # State management
+  provider: ^6.0.5
+  
+  # Local storage
+  shared_preferences: ^2.2.2
+  
+  # Image picker
+  image_picker: ^1.0.4
+  
+  # JWT auth
+  flutter_secure_storage: ^9.0.0
+  
+  # UI components
+  cached_network_image: ^3.3.0
+  photo_view: ^0.14.0
+  
+  # Forms validation
+  flutter_form_builder: ^9.1.1
+  form_builder_validators: ^9.1.0
+  
+  cupertino_icons: ^1.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - assets/images/
+  
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: fonts/Roboto-Regular.ttf
+        - asset: fonts/Roboto-Bold.ttf
+          weight: 700
