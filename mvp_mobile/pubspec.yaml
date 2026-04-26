@@ -1,0 +1,17 @@
+name: farfor_mobile_mvp
+description: MVP приложение для коллекционеров фарфоровых молочников и сливочников
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  dio: ^5.8.0+1
+  flutter_secure_storage: ^9.2.4
+  image_picker: ^1.1.2
+
+flutter:
+  uses-material-design: true
