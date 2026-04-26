@@ -1,20 +1,34 @@
 ```
-# Python
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+coverage/
+
+# Environment variables
+.env
+.env.local
+.env.*
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.tmp
+
+# Python cache
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
-*.db
 
-# Dependencies
-backend/requirements.txt
+# Logs
+*.log
 
-# Mobile app
-.mobile/
-.dart_tool/
-.pub/
-build/
-ios/.symlinks/
-libCachedImageData/
-generated/
+# OS generated files
+.DS_Store
+Thumbs.db
 ```
